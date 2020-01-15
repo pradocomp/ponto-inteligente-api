@@ -15,8 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,17 +30,15 @@ public class Empresa implements Serializable {
 	private static final long serialVersionUID = 6332580094060692727L;
 	
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	@Column(nullable = false)
+	@Column(name = "razao_social", nullable = false)
 	private String razaoSocial;
-	@Column(nullable = false)
+	@Column(name = "cnpj", nullable = false)
 	private String cnpj;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(name = "data_criacao", nullable = false)
 	private Date dataCriacao;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(name = "data_atualizacao", nullable = false)
 	private Date dataAtualizacao;
 	@OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Funcionario> funcionarios;

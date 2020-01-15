@@ -34,23 +34,21 @@ public class Lancamento implements Serializable {
 	private static final long serialVersionUID = 4837216188338228996L;
 	
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(name = "data", nullable = false)
 	private Date data;
-	@Column(nullable = true)
+	@Column(name = "descricao", nullable = true)
 	private String descricao;
-	@Column(nullable = true)
+	@Column(name = "localizacao", nullable = true)
 	private String localizacao;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(name = "data_criacao", nullable = false)
 	private Date dataCriacao;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(name = "data_atualizacao", nullable = false)
 	private Date dataAtualizacao;
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(name = "tipo", nullable = false)
 	private TipoEnum tipo;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Funcionario funcionario;

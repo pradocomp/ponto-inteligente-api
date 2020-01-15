@@ -20,8 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.projeto.pontointeligente.api.enums.PerfilEnum;
@@ -40,29 +38,28 @@ public class Funcionario implements Serializable {
 	private static final long serialVersionUID = 7123327503060649652L;
 	
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	@Column(nullable = false)
+	@Column(name = "nome", nullable = false)
 	private String nome;
-	@Column(nullable = false)
+	@Column(name = "email", nullable = false)
 	private String email;
-	@Column(nullable = false)
+	@Column(name = "senha", nullable = false)
 	private String senha;
-	@Column(nullable = false)
+	@Column(name = "cpf", nullable = false)
 	private String cpf;
-	@Column(nullable = true)
+	@Column(name = "valor_hora", nullable = true)
 	private BigDecimal valorHora;
-	@Column(nullable = true)
+	@Column(name = "qtd_horas_trabalho_dia", nullable = true)
 	private Float qtdHorasTrabalhoDia;
-	@Column(nullable = true)
+	@Column(name = "qtd_horas_almoco", nullable = true)
 	private Float qtdHorasAlmoco;
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private PerfilEnum perfil;
-	@Column(nullable = false)
+	@Column(name = "data_criacao", nullable = false)
 	private Date dataCriacao;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(name = "data_atualizacao", nullable = false)
 	private Date dataAtualizacao;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Empresa empresa;
@@ -70,11 +67,11 @@ public class Funcionario implements Serializable {
 	private List<Lancamento> lancamentos;
 	
 	@Transient
-	public Optional<Float> qtdHorasAlmocoOpt;
+	public Optional<Float> qtdHorasAlmocoOpt = Optional.ofNullable(qtdHorasAlmoco);
 	@Transient
-	public Optional<Float> qtdHorasTrabalhoDiaOpt;
+	public Optional<Float> qtdHorasTrabalhoDiaOpt  = Optional.ofNullable(qtdHorasTrabalhoDia);
 	@Transient
-	public Optional<BigDecimal> valorHoraOpt;
+	public Optional<BigDecimal> valorHoraOpt  = Optional.ofNullable(valorHora);
 	
 	@PreUpdate
     public void preUpdate() {

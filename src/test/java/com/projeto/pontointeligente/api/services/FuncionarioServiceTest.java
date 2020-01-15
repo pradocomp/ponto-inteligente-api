@@ -16,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.projeto.pontointeligente.api.entities.Empresa;
 import com.projeto.pontointeligente.api.entities.Funcionario;
 import com.projeto.pontointeligente.api.repositories.FuncionarioRepository;
 
