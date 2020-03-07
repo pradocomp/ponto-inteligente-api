@@ -27,7 +27,7 @@ import com.projeto.pontointeligente.api.utils.ValidatorUtils;
 import lombok.NoArgsConstructor;
 
 @RestController
-@RequestMapping("/api/funcionario-pj")
+@RequestMapping("/api/cadastrar-pj")
 @CrossOrigin(origins = "*")
 @NoArgsConstructor
 public class CadastroPJController {

@@ -2,20 +2,35 @@ package com.projeto.pontointeligente.api.utils;
 
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Optional;
 
+import org.apache.commons.lang3.EnumUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import com.projeto.pontointeligente.api.dtos.CadastroPFDto;
 import com.projeto.pontointeligente.api.dtos.CadastroPJDto;
 import com.projeto.pontointeligente.api.dtos.EmpresaDto;
+import com.projeto.pontointeligente.api.dtos.FuncionarioDto;
+import com.projeto.pontointeligente.api.dtos.LancamentoDto;
 import com.projeto.pontointeligente.api.entities.Empresa;
 import com.projeto.pontointeligente.api.entities.Funcionario;
+import com.projeto.pontointeligente.api.entities.Lancamento;
 import com.projeto.pontointeligente.api.enums.PerfilEnum;
+import com.projeto.pontointeligente.api.enums.TipoEnum;
+import com.projeto.pontointeligente.api.services.LancamentoService;
 
 @Component
 public final class ConverterUtils {
+	
+	@Autowired
+	private LancamentoService lancamentoService;
+	
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 	
 	/**
 	 * Converte os dados do DTO para funcionário.
@@ -110,5 +125,81 @@ public final class ConverterUtils {
 		empresaDto.setRazaoSocial(empresa.getRazaoSocial());
 		return empresaDto;
 	}
+	
+	/**
+	 * Retorna um DTO com os dados de um funcionário.
+	 * 
+	 * @param funcionario
+	 * @return FuncionarioDto
+	 */
+	public FuncionarioDto converterFuncionarioDto(Funcionario funcionario) {
+		FuncionarioDto funcionarioDto = new FuncionarioDto();
+		funcionarioDto.setId(funcionario.getId());
+		funcionarioDto.setEmail(funcionario.getEmail());
+		funcionarioDto.setNome(funcionario.getNome());
+		funcionario.getQtdHorasAlmocoOpt().ifPresent(
+				qtdHorasAlmoco -> funcionarioDto.setQtdHorasAlmoco(Optional.of(Float.toString(qtdHorasAlmoco))));
+		funcionario.getQtdHorasTrabalhoDiaOpt().ifPresent(
+				qtdHorasTrabDia -> funcionarioDto.setQtdHorasTrabalhoDia(Optional.of(Float.toString(qtdHorasTrabDia))));
+		funcionario.getValorHoraOpt().ifPresent(
+				valorHora -> funcionarioDto.setValorHora(Optional.of(valorHora.toString())));
 
+		return funcionarioDto;
+	}
+	
+	/**
+	 * Converte um LancamentoDto para uma entidade Lancamento.
+	 * 
+	 * @param lancamentoDto
+	 * @param result
+	 * @return Lancamento
+	 * @throws ParseException 
+	 * @throws java.text.ParseException 
+	 */
+	public Lancamento converterDtoParaLancamento(LancamentoDto lancamentoDto, BindingResult result) throws ParseException {
+		Lancamento lancamento = new Lancamento();
+
+		if (lancamentoDto.getId().isPresent()) {
+			Optional<Lancamento> lanc = this.lancamentoService.buscarPorId(lancamentoDto.getId().get());
+			if (lanc.isPresent()) {
+				lancamento = lanc.get();
+			} else {
+				result.addError(new ObjectError("lancamento", "Lançamento não encontrado."));
+			}
+		} else {
+			lancamento.setFuncionario(new Funcionario());
+			lancamento.getFuncionario().setId(lancamentoDto.getFuncionarioId());
+		}
+
+		lancamento.setDescricao(lancamentoDto.getDescricao());
+		lancamento.setLocalizacao(lancamentoDto.getLocalizacao());
+		lancamento.setData(this.dateFormat.parse(lancamentoDto.getData()));
+
+		if (EnumUtils.isValidEnum(TipoEnum.class, lancamentoDto.getTipo())) {
+			lancamento.setTipo(TipoEnum.valueOf(lancamentoDto.getTipo()));
+		} else {
+			result.addError(new ObjectError("tipo", "Tipo inválido."));
+		}
+
+		return lancamento;
+	}
+
+	/**
+	 * Converte uma entidade lançamento para seu respectivo DTO.
+	 * 
+	 * @param lancamento
+	 * @return LancamentoDto
+	 */
+	public LancamentoDto converterLancamentoDto(Lancamento lancamento) {
+		LancamentoDto lancamentoDto = new LancamentoDto();
+		lancamentoDto.setId(Optional.of(lancamento.getId()));
+		lancamentoDto.setData(this.dateFormat.format(lancamento.getData()));
+		lancamentoDto.setTipo(lancamento.getTipo().toString());
+		lancamentoDto.setDescricao(lancamento.getDescricao());
+		lancamentoDto.setLocalizacao(lancamento.getLocalizacao());
+		lancamentoDto.setFuncionarioId(lancamento.getFuncionario().getId());
+
+		return lancamentoDto;
+	}
+	
 }

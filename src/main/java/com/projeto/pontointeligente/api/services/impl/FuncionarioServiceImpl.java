@@ -21,7 +21,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
 	@Override
 	public Funcionario persistir(Funcionario funcionario) {
-		log.info("Cadastro do funcionario {} na base de dados", funcionario);
+		log.info("Cadastro do funcionario {} na base de dados", funcionario.getNome());
 		return this.funcionarioRepository.save(funcionario);
 	}
 

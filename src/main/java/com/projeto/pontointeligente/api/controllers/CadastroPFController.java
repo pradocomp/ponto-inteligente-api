@@ -28,7 +28,7 @@ import com.projeto.pontointeligente.api.utils.ValidatorUtils;
 import lombok.ToString;
 
 @RestController
-@RequestMapping("/api/funcionario-pf")
+@RequestMapping("/api/cadastrar-pf")
 @CrossOrigin(origins = "*")
 @ToString
 public class CadastroPFController {

@@ -38,16 +38,16 @@ public class Funcionario implements Serializable {
 	private static final long serialVersionUID = 7123327503060649652L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	@Column(name = "nome", nullable = false)
 	private String nome;
 	@Column(name = "email", nullable = false)
 	private String email;
-	@Column(name = "senha", nullable = false)
-	private String senha;
 	@Column(name = "cpf", nullable = false)
 	private String cpf;
+	@Column(name = "senha", nullable = false)
+	private String senha;
 	@Column(name = "valor_hora", nullable = true)
 	private BigDecimal valorHora;
 	@Column(name = "qtd_horas_trabalho_dia", nullable = true)
@@ -55,7 +55,7 @@ public class Funcionario implements Serializable {
 	@Column(name = "qtd_horas_almoco", nullable = true)
 	private Float qtdHorasAlmoco;
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(name = "perfil", nullable = false)
 	private PerfilEnum perfil;
 	@Column(name = "data_criacao", nullable = false)
 	private Date dataCriacao;
@@ -65,14 +65,22 @@ public class Funcionario implements Serializable {
 	private Empresa empresa;
 	@OneToMany(mappedBy = "funcionario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Lancamento> lancamentos;
-	
+
 	@Transient
-	public Optional<Float> qtdHorasAlmocoOpt = Optional.ofNullable(qtdHorasAlmoco);
+	public Optional<BigDecimal> getValorHoraOpt() { 
+		return Optional.ofNullable(valorHora);
+	}
+
 	@Transient
-	public Optional<Float> qtdHorasTrabalhoDiaOpt  = Optional.ofNullable(qtdHorasTrabalhoDia);
+	public Optional<Float> getQtdHorasTrabalhoDiaOpt() {
+		return Optional.ofNullable(qtdHorasTrabalhoDia);
+	}
+
 	@Transient
-	public Optional<BigDecimal> valorHoraOpt  = Optional.ofNullable(valorHora);
-	
+	public Optional<Float> getQtdHorasAlmocoOpt() {
+		return Optional.ofNullable(qtdHorasAlmoco);
+	}
+
 	@PreUpdate
     public void preUpdate() {
         dataAtualizacao = new Date();

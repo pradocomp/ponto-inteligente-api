@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.projeto.pontointeligente.api.entities.Lancamento;
@@ -34,9 +34,9 @@ public class LancamentoServiceImpl implements LancamentoService {
 	}
 
 	@Override
-	public Page<Lancamento> buscarPorFuncionarioId(Long funcionarioId, PageRequest pageRequest) {
+	public Page<Lancamento> buscarPorFuncionarioId(Long funcionarioId, Pageable paging) {
 		log.info("Busca um lancamento para um ID Funcionario {}", funcionarioId);
-		return this.lancamentoRepository.findByFuncionarioId(funcionarioId, pageRequest);
+		return this.lancamentoRepository.findByFuncionarioId(funcionarioId, paging);
 	}
 
 	@Override

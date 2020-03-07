@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.projeto.pontointeligente.api.entities.Lancamento;
 
@@ -29,7 +30,7 @@ public interface LancamentoService {
 	 * @param pageRequest
 	 * @return
 	 */
-	Page<Lancamento> buscarPorFuncionarioId(Long funcionarioId, PageRequest pageRequest);
+	Page<Lancamento> buscarPorFuncionarioId(Long funcionarioId, Pageable paging);
 	
 	/**
 	 * Remove um lancamento pelo id
